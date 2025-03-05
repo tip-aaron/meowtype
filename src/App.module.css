@@ -4,7 +4,7 @@
 }
 
 .typingContainer:focus-within {
-
+  outline: 2px solid white;
 }
 
 .word {
@@ -14,7 +14,6 @@
 .typingInput {
   position: absolute;
 
-  visibility: hidden;
   opacity: 0;
 
   overflow: hidden;

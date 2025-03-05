@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import styles from "./App.module.css";
 
 type Letter = {
@@ -33,26 +33,44 @@ function App() {
     inputRef.current?.focus();
   }
 
+  const inputOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const remainingWords = sentence.slice(e.target.value.split(" ").length - 1);
+    
+    setSentence((prev) => {
+      return prev.map((w) => {
+        const newW = w.value.map((l) => {
+          return l;
+        });
+
+        return {
+          isTyped: newW.every((l) => l.isTyped),
+          value: newW
+        };
+      })
+    });
+    
+    setInputValue(e.target.value);
+  }
+
   return (
     <>
       <div onClick={focusInput} className={styles.typingContainer}>
-        {sentence.map((w) => {
-
+        {sentence.map((w, i) => {
           return (
-            <div className={cn}>
-              {w.value.map((l) => (
-                <span className={l.isTyped ? "typed" : ""}>{l.value}</span>
+            <div key={"word" + i} className={styles.word}>
+              {w.value.map((l, i) => (
+                <span key={"letter " + l + i} className={l.isTyped ? styles.typedLetter : ""}>{l.value}</span>
               ))}
             </div>
           );
         })}
         <input
-          className="typing-input"
+          className={styles.typingInput}
           aria-hidden="true"
           autoComplete="off"
           autoCapitalize="off"
+          onChange={inputOnChange}
           value={inputValue}
-          autoFocus
           ref={inputRef}
         />
       </div>
